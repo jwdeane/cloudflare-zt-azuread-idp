@@ -1,3 +1,6 @@
+# General
+scratch.*
+
 # Local .terraform directories
 **/.terraform/*
 
