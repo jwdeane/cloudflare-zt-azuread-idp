@@ -3,6 +3,17 @@ resource "azuread_group" "education" {
   security_enabled = true
 }
 
+resource "cloudflare_access_group" "education" {
+  account_id = var.cloudflare_account_id
+  name = "Azure Education Department"
+  include {
+    azure {
+      id = [ azuread_group.education.object_id ]
+      identity_provider_id = cloudflare_access_identity_provider.default.id
+    }
+  }
+}
+
 resource "azuread_group_member" "education" {
   for_each = { for u in azuread_user.users : u.mail_nickname => u if u.department == "Education" }
 
@@ -13,6 +24,17 @@ resource "azuread_group_member" "education" {
 resource "azuread_group" "managers" {
   display_name     = "Education - Managers"
   security_enabled = true
+}
+
+resource "cloudflare_access_group" "managers" {
+  account_id = var.cloudflare_account_id
+  name = "Azure Education - Managers"
+  include {
+    azure {
+      id = [ azuread_group.managers.object_id ]
+      identity_provider_id = cloudflare_access_identity_provider.default.id
+    }
+  }
 }
 
 resource "azuread_group_member" "managers" {
@@ -27,6 +49,17 @@ resource "azuread_group" "engineers" {
   security_enabled = true
 }
 
+resource "cloudflare_access_group" "engineers" {
+  account_id = var.cloudflare_account_id
+  name = "Azure Education - Engineers"
+  include {
+    azure {
+      id = [ azuread_group.engineers.object_id ]
+      identity_provider_id = cloudflare_access_identity_provider.default.id
+    }
+  }
+}
+
 resource "azuread_group_member" "engineers" {
   for_each = { for u in azuread_user.users : u.mail_nickname => u if u.job_title == "Engineer" }
 
@@ -37,6 +70,17 @@ resource "azuread_group_member" "engineers" {
 resource "azuread_group" "customer_success" {
   display_name     = "Education - Customer Success"
   security_enabled = true
+}
+
+resource "cloudflare_access_group" "customer_success" {
+  account_id = var.cloudflare_account_id
+  name = "Azure Education - Customer Success"
+  include {
+    azure {
+      id = [ azuread_group.customer_success.object_id ]
+      identity_provider_id = cloudflare_access_identity_provider.default.id
+    }
+  }
 }
 
 resource "azuread_group_member" "customer_success" {
