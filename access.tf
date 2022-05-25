@@ -1,6 +1,6 @@
 resource "cloudflare_access_application" "default" {
   zone_id = var.cloudflare_zone_id
-  name = "Azure Zone"
+  name = "Azure Test Zone"
   domain = "${var.cloudflare_domain}/*"
   type = "self_hosted"
   session_duration = "24h"
