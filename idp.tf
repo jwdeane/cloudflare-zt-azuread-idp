@@ -1,6 +1,8 @@
+data "azuread_client_config" "current" {}
+
 resource "azuread_application" "default" {
   display_name = "Cloudflare Access"
-  owners = [ "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx" ] # what is this magic number??
+  owners = [ data.azuread_client_config.current.object_id ]
 
   required_resource_access {
     resource_app_id = "00000003-0000-0000-c000-000000000000" # Microsoft Graph
