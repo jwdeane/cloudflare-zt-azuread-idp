@@ -1,0 +1,5 @@
+cloudflare_account_id = "YOUR CLOUDFLARE ACCOUNT ID"
+cloudflare_api_key = "YOUR CLOUDFLARE API KEY"
+cloudflare_domain = "YOUR DOMAIN (e.g. example.com)"
+cloudflare_email = "YOUR CLOUDFLARE ACCOUNT EMAIL"
+cloudflare_zone_id = "YOUR CLOUDFLARE ZONE ID"
