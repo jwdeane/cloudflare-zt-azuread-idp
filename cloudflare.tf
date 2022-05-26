@@ -23,7 +23,7 @@ resource "cloudflare_access_identity_provider" "default" {
 resource "cloudflare_access_application" "default" {
   zone_id = var.cloudflare_zone_id
   name = "Azure Test Zone"
-  domain = "${var.cloudflare_domain}/*"
+  domain = "${var.cloudflare_zone}/*"
   type = "self_hosted"
   session_duration = "24h"
   auto_redirect_to_identity = false
