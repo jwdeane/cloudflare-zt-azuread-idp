@@ -19,25 +19,47 @@ resource "cloudflare_access_identity_provider" "default" {
   }
 }
 
-# Access Application
-resource "cloudflare_access_application" "default" {
+# Access Application Catch-all
+resource "cloudflare_access_application" "catch_all" {
   zone_id = var.cloudflare_zone_id
-  name = "Azure Test Zone"
-  domain = "${var.cloudflare_zone}/*"
+  name = "Azure Test App"
+  domain = var.cloudflare_zone
   type = "self_hosted"
   session_duration = "24h"
   auto_redirect_to_identity = false
 }
 
-resource "cloudflare_access_policy" "default" {
-  application_id = cloudflare_access_application.default.id
-  zone_id = cloudflare_access_application.default.zone_id
+resource "cloudflare_access_policy" "catch_all" {
+  application_id = cloudflare_access_application.catch_all.id
+  zone_id = cloudflare_access_application.catch_all.zone_id
   name = "Allow Azure AD Users"
   precedence = 1
   decision = "allow"
 
   include {
-    login_method = [ cloudflare_access_identity_provider.default.id ]
+    login_method = [ cloudflare_access_identity_provider.default.id ] # allow all Azure AD Users
+  }
+}
+
+# Access Application Managers
+resource "cloudflare_access_application" "managers" {
+  zone_id = var.cloudflare_zone_id
+  name = "Azure Test App - Managers"
+  domain = "${var.cloudflare_zone}/managers"
+  type = "self_hosted"
+  session_duration = "24h"
+  auto_redirect_to_identity = false
+}
+
+resource "cloudflare_access_policy" "managers" {
+  application_id = cloudflare_access_application.managers.id
+  zone_id = cloudflare_access_application.managers.zone_id
+  name = "Allow Azure AD Managers"
+  precedence = 1
+  decision = "allow"
+
+  include {
+    group = [ cloudflare_access_group.managers.id ]
   }
 }
 
@@ -84,4 +106,24 @@ resource "cloudflare_access_group" "customer_success" {
       identity_provider_id = cloudflare_access_identity_provider.default.id
     }
   }
+}
+
+# Worker Application
+resource "cloudflare_record" "worker" {
+  zone_id = var.cloudflare_zone_id
+  type = "AAAA"
+  name = "@"
+  value = "100::"
+  proxied = true
+}
+
+resource "cloudflare_worker_route" "default" {
+  zone_id = var.cloudflare_zone_id
+  pattern = "${cloudflare_record.worker.hostname}/*"
+  script_name = cloudflare_worker_script.default.name
+}
+
+resource "cloudflare_worker_script" "default" {
+  name = "azure-app"
+  content = file("script.js")
 }
