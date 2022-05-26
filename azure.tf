@@ -10,12 +10,11 @@ resource "azuread_user" "users" {
   )
 
   password = format(
-    "%s%s%s!",
-    lower(each.value.last_name),
+    "%s%s-%s!",
     substr(lower(each.value.first_name), 0, 1),
-    length(each.value.first_name)
+    substr(lower(each.value.last_name), 0, 1),
+    random_password.password.result
   )
-  force_password_change = true
 
   display_name = "${each.value.first_name} ${each.value.last_name}"
   department = each.value.department
@@ -110,7 +109,7 @@ resource "azuread_application" "default" {
     }
   }
   web {
-    redirect_uris = [ "https://${var.cloudflare_zt_domain}/cdn-cgi/access/callback" ]
+    redirect_uris = [ "https://${var.cloudflare_zero_trust_team_domain}/cdn-cgi/access/callback" ]
   }
 }
 

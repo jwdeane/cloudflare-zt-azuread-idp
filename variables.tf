@@ -4,7 +4,7 @@ variable "cloudflare_api_key" {}
 variable "cloudflare_zone" {}
 variable "cloudflare_email" {}
 variable "cloudflare_zone_id" {}
-variable "cloudflare_zt_domain" {}
+variable "cloudflare_zero_trust_team_domain" {}
 # Azure vars
 variable "azure_arm_tenant_id" {}
 variable "azure_custom_domain_txt" {}
