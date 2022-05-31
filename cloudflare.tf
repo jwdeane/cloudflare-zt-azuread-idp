@@ -26,7 +26,8 @@ resource "cloudflare_access_application" "catch_all" {
   domain = var.cloudflare_zone
   type = "self_hosted"
   session_duration = "24h"
-  auto_redirect_to_identity = false
+  allowed_idps = [ cloudflare_access_identity_provider.default.id ]
+  auto_redirect_to_identity = true
 }
 
 resource "cloudflare_access_policy" "catch_all" {
@@ -48,7 +49,8 @@ resource "cloudflare_access_application" "managers" {
   domain = "${var.cloudflare_zone}/managers"
   type = "self_hosted"
   session_duration = "24h"
-  auto_redirect_to_identity = false
+  allowed_idps = [ cloudflare_access_identity_provider.default.id ]
+  auto_redirect_to_identity = true
 }
 
 resource "cloudflare_access_policy" "managers" {
