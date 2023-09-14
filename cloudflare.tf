@@ -28,6 +28,7 @@ resource "cloudflare_access_application" "catch_all" {
   session_duration = "24h"
   allowed_idps = [ cloudflare_access_identity_provider.default.id ]
   auto_redirect_to_identity = true
+  logo_url                  = "https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg"
 }
 
 resource "cloudflare_access_policy" "catch_all" {
@@ -51,6 +52,7 @@ resource "cloudflare_access_application" "managers" {
   session_duration = "24h"
   allowed_idps = [ cloudflare_access_identity_provider.default.id ]
   auto_redirect_to_identity = true
+  logo_url                  = "https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg"
 }
 
 resource "cloudflare_access_policy" "managers" {
